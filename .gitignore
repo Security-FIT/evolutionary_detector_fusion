@@ -1,0 +1,8 @@
+*__pycache__*
+scores/
+results/
+*.h5
+*.json
+*.png
+*.pkl
+*.pdf
