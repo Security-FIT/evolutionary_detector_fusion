@@ -63,3 +63,19 @@ def get_num_params(model_name: str) -> int:
     }
 
     return param_map[model_name]
+
+
+def calculate_minDCF(labels, predictions, p_target=0.95, c_miss=1, c_fa=10) -> float:
+    """
+    Calculate the minimum Detection Cost Function (minDCF)
+    """
+    far, frr, thresholds = det_curve(labels, predictions, pos_label=0)
+
+    c_det = c_miss * frr * p_target + c_fa * far * (1 - p_target)
+    min_c_det = np.min(c_det)
+
+    # See Equations (3) and (4).  Now we normalize the cost.
+    c_def = min(c_miss * p_target, c_fa * (1 - p_target))
+    min_dcf = min_c_det / c_def
+    
+    return min_dcf
